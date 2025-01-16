@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org" data-bs-theme="dark">
 	<head>
 		<th:block th:replace="~{fragments/head :: head}"></th:block>
 		<title>Agregar Paciente</title>
@@ -9,6 +9,127 @@
 		<main class="bg-body-secondary bg-gradient w-100 h-100 p-4">
 			<section class="container">
 				<h2>Agregar Paciente</h2>
+
+				<form
+					action="#"
+					th:action="@{/patient/add}"
+					method="post"
+					class="w-75"
+				>
+					<div class="row my-3">
+						<div class="form-group col">
+							<label for="dni" class="form-label">DNI</label>
+							<input
+								type="text"
+								name="dni"
+								id="dni"
+								class="form-control"
+								required
+							/>
+						</div>
+
+						<div class="form-group col">
+							<label for="name" class="form-label">Nombre</label>
+							<input
+								type="text"
+								name="name"
+								id="name"
+								class="form-control"
+								required
+							/>
+						</div>
+
+						<div class="form-group my-3">
+							<label for="birthdate" class="form-label">
+								Fecha de nacimiento
+							</label>
+							<input
+								type="date"
+								name="birthdate"
+								id="birthdate"
+								class="form-control"
+								required
+							/>
+						</div>
+					</div>
+
+					<div class="form-group my-3">
+						<h3>Motivo de la visita</h3>
+						<div class="d-flex gap-3 flex-row">
+							<div
+								class="form-check my-1"
+								th:each="visitReason : ${visitReasons}"
+							>
+								<input
+									type="radio"
+									name="visitReason"
+									th:id="${visitReason}"
+									th:value="${visitReason}"
+									class="form-check-input"
+									required
+								/>
+
+								<label
+									th:for="${visitReason}"
+									th:text="${visitReason.value}"
+									class="form-check-label"
+								></label>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group my-3">
+						<label for="appointmentReason" class="form-label">
+							Motivo de la consulta
+						</label>
+						<input
+							type="text"
+							name="appointmentReason"
+							id="appointmentReason"
+							class="form-control"
+							required
+						/>
+					</div>
+
+					<div class="form-group my-3">
+						<label for="recipes" class="form-label">
+							Medicamentos (separados por comas)
+						</label>
+						<input
+							type="text"
+							name="recipes"
+							id="recipes"
+							class="form-control"
+							required
+						/>
+					</div>
+
+					<div class="form-group my-3">
+						<label for="previousAppointment" class="form-label">
+							Fecha visita anterior
+						</label>
+						<input
+							type="date"
+							name="previousAppointment"
+							id="previousAppointment"
+							class="form-control"
+						/>
+					</div>
+
+					<div class="form- my-4 d-flex justify-content-between">
+						<div>
+							<button type="submit" class="btn btn-primary">
+								Enviar
+							</button>
+							<button type="reset" class="btn btn-secondary">
+								Vaciar
+							</button>
+						</div>
+						<a th:href="@{/home}" class="btn btn-secondary">
+							Volver
+						</a>
+					</div>
+				</form>
 			</section>
 		</main>
 	</body>
