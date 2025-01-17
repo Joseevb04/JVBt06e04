@@ -38,6 +38,27 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public Patient addPatientFromRequest(AddPatientRequest data) {
-        final List<Recipe> recipes = Arrays.asList(data.getRecipes().split(",")).stream().map(mapper);
+        final List<Recipe> recipes = Arrays
+                .asList(data.getRecipes().split(","))
+                .stream().map(r -> Recipe.builder()
+                        .recipe(r)
+                        .build())
+                .toList();
+
+        final Patient patient = Patient.builder()
+                .dni(data.getDni())
+                .name(data.getName())
+                .birthDate(data.getBirthdate())
+                .visitReason(data.getVisitReason())
+                .previousVisit(data.getPreviousAppointment())
+                .build();
+
+        recipes.forEach(r -> r.setPatient(patient));
+
+        patient.setRecipes(recipes);
+
+        recipeRepository.saveAll(recipes);
+
+        return patientRepository.save(patient);
     }
 }
