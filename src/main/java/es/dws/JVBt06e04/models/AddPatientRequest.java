@@ -30,7 +30,7 @@ public class AddPatientRequest {
     @NotNull(message = "El campo razón de visita no puede estar vacío")
     private VisitReasonEnum visitReason;
 
-    @NotBlank(message = "El campo razón de visita no puede estar vacío")
+    @NotBlank(message = "El campo razón de la cita no puede estar vacío")
     private String appointmentReason;
 
     @NotBlank(message = "El campo medicamentos no puede estar vacío")

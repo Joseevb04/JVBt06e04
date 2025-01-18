@@ -9,7 +9,7 @@ public interface PatientService {
 
     List<Patient> getAllPatients();
 
-    Patient getAllPatientsByDni(final String dni);
+    Patient getPatientByDni(final String dni);
 
     Patient addPatient(final Patient patient);
 

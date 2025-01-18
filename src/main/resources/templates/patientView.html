@@ -2,25 +2,14 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org" data-bs-theme="dark">
 	<head>
 		<th:block th:replace="~{fragments/head :: head}"></th:block>
-		<title>Pacientes</title>
+		<title>Paciente</title>
 	</head>
 	<body>
 		<header th:replace="~{fragments/header :: header}"></header>
 		<main class="bg-body-secondary bg-gradient w-100 h-100 p-4">
 			<section class="container-fluid">
-				<h2>Listado de Pacientes</h2>
-
-				<article
-					class="card my-3 shadow"
-					th:each="patient : ${patients}"
-				>
-					<div class="card-header">
-						<h3>
-							<a th:href="@{/patient/{dni}(dni = ${patient.dni})}"
-								>Nombre: <span th:text="${patient.name}"></span
-							></a>
-						</h3>
-					</div>
+				<h2 th:text="${patient.name}"></h2>
+				<article class="card my-3 shadow">
 					<div class="card-body">
 						<h3>Datos:</h3>
 

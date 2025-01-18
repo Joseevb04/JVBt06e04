@@ -11,6 +11,7 @@ import es.dws.JVBt06e04.models.Recipe;
 import es.dws.JVBt06e04.repositories.PatientRepository;
 import es.dws.JVBt06e04.repositories.RecipeRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -26,8 +27,9 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public Patient getAllPatientsByDni(String dni) {
-        return patientRepository.findById(dni)
+    public Patient getPatientByDni(String dni) {
+        return patientRepository
+                .findById(dni)
                 .orElseThrow(() -> new EntityNotFoundException("Patient with dni: %s".formatted(dni)));
     }
 
@@ -37,28 +39,31 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    @Transactional
     public Patient addPatientFromRequest(AddPatientRequest data) {
-        final List<Recipe> recipes = Arrays
-                .asList(data.getRecipes().split(","))
-                .stream().map(r -> Recipe.builder()
-                        .recipe(r)
+        if (data.getRecipes() == null || data.getRecipes().isBlank()) {
+            throw new IllegalArgumentException("Recipes cannot be null or empty");
+        }
+
+        List<Recipe> recipes = Arrays.stream(data.getRecipes().split(","))
+                .map(recipeName -> Recipe.builder()
+                        .recipe(recipeName.trim())
                         .build())
                 .toList();
 
-        final Patient patient = Patient.builder()
+        Patient patient = Patient.builder()
                 .dni(data.getDni())
                 .name(data.getName())
                 .birthDate(data.getBirthdate())
                 .visitReason(data.getVisitReason())
+                .appointmentReason(data.getAppointmentReason())
                 .previousVisit(data.getPreviousAppointment())
                 .build();
 
-        recipes.forEach(r -> r.setPatient(patient));
-
+        recipes.forEach(recipe -> recipe.setPatient(patient));
         patient.setRecipes(recipes);
 
         recipeRepository.saveAll(recipes);
-
         return patientRepository.save(patient);
     }
 }
